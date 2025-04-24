@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>ChatGPT Clone</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    input, textarea, select {
+      width: 100%;
+      margin-bottom: 12px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #10a37f;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0e8c6e;
+    }
+    pre {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>💬 ChatGPT Clone</h1>
+
+  <input id="apiKey" type="text" placeholder="🔑 Введите OpenAI API ключ" />
+
+  <label for="modelSelect">Модель:</label>
+  <select id="modelSelect">
+    <option value="gpt-4-1106-preview" selected>GPT-4.1 (Turbo)</option>
+    <option value="gpt-4">GPT-4 (обычная)</option>
+    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+  </select>
+
+  <textarea id="message" rows="5" placeholder="Введите сообщение..."></textarea>
+
+  <button onclick="send()">Отправить</button>
+
+  <h3>Ответ:</h3>
+  <pre id="response"></pre>
+
+  <script>
+    async function send() {
+      const apiKey = document.getElementById("apiKey").value;
+      const model = document.getElementById("modelSelect").value;
+      const message = document.getElementById("message").value;
+
+      const res = await fetch("http://127.0.0.1:8000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          api_key: apiKey,
+          model: model,
+          message: message
+        })
+      });
+
+      const data = await res.json();
+      document.getElementById("response").innerText = data.response || ("Ошибка: " + data.error);
+    }
+  </script>
+</body>
+</html>
